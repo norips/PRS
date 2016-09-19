@@ -5,6 +5,11 @@
 #include <unistd.h> // lseek
 #include "tool/tools.h"
 
+/**
+* Ici on copie un fichier source dans un autre fichier en inversant l'odre de ses données
+* usage: reverse fichier_source fichier_cible
+*/
+
 int main(int argc, char** argv) {
     checkParam(argc, 2);
     int fd1, fd2;

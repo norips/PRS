@@ -6,6 +6,11 @@
 #include "tool/tools.h"
 
 
+/**
+* Ici on affiche l'entier situé à la position demandée dans un fichier
+* usage: lire-entier fichier_à_lire position_à_laquelle_lire
+
+*/
 int main(int argc, char** argv) {
     checkParam(argc, 2);
     int fd = open(argv[1], O_RDONLY);
