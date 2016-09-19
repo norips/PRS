@@ -14,7 +14,7 @@ int main(int argc,char** argv) { //main est le point d'entré d'un programme C (
     char buff[SIZE];
     while ((i = read(0, buff, SIZE-1)) > 0) { // read lit un buffer (première param. 0 étant l'entrée standard) sur SIZE-1(Le dernier emplacement du tableau contiendra OEF voire plus loin) octets (param 3), stocke la valeur lue dans le param 2 et renvoie le nombre d'octets effectivement lus
         j += i; // j va contenir le nombre total d'octets lus
-        buff[SIZE-1] = '\0'; // on ajoute un caractère OEF à la fin du buffer contenant les données lues. 
+        buff[i] = '\0'; // on ajoute un caractère OEF à la fin du buffer contenant les données lues. 
         write(1, buff, i); // on écrit dans la sortie standard (1, premier param) la valeur de buff (param 2) sur i (i étant le nombre effectif d'octets lus) octets (param 3)
     }
     printf("\n %d octets lus\n", j); // On affiche le nombre total d'octets lus (renseigne toi sur printf)
