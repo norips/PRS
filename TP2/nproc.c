@@ -17,10 +17,12 @@ int main(int argc,char** argv) {
             int son_pid = getpid();
             printf("je m'appelle %d et je suis le numero %d\n",son_pid,i);
             return(EXIT_SUCCESS);
-        } else {
-            int stat;
-            wait(&stat);
         }
+    }
+    for(int i = 0; i<n;i++) {
+        int stat;
+        int pid = wait(&stat);
+        printf("%d a quitte\n",pid);
     }
     return (EXIT_SUCCESS); // on termine le programme en retournant une valeur disant que tout s'est bien passé
 }
