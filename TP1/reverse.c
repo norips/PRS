@@ -17,13 +17,11 @@ int main(int argc, char** argv) {
     verif((fd1 == -1), "Can't open input");
     fd2 = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, 0666);
     verif((fd2 == -1), "Can't open output");
-    lseek(fd1, -1, SEEK_END);
+    lseek(fd1, +1, SEEK_END);
     char buff;
-    while (read(fd1, &buff, sizeof (char)) > 0) {
+    while (lseek(fd1, -2, SEEK_CUR) >= 0) {
+        read(fd1, &buff, sizeof (char));
         verif((write(fd2, &buff, sizeof (char)) != sizeof (char)), "write");
-        if (lseek(fd1, -2, SEEK_CUR) == -1) {
-            return (EXIT_SUCCESS);
-        }
     }
     return (EXIT_SUCCESS);
 }
