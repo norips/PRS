@@ -14,6 +14,8 @@
 int main(int argc, char** argv) {
     checkParam(argc, 2);
     int fd = open(argv[1], O_RDONLY);
+    int log = open("ERREURS-LIRE.log", O_WRONLY | O_CREAT | O_TRUNC, 0666);
+    verif((dup2(log,2) == -1), "dup2");
     verif((fd == -1), "Open entier.txt");
 
     int pos = atoi(argv[2]);
