@@ -4,7 +4,8 @@ SRC := $(wildcard *.c)
 TARGET := $(SRC:%.c=bin/%)
 
 all: | bin $(TARGET)
-
+	cd shell; make
+	
 bin/% : %.c tools.o
 	$(CC) $(CFLAGS) $^ -o $@
 

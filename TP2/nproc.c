@@ -6,23 +6,22 @@
 #include <sys/wait.h> //wait
 #include "../TP1/tool/tools.h"
 
-
-int main(int argc,char** argv) { 
-    checkParam(argc,1);
+int main(int argc, char** argv) {
+    checkParam(argc, 1);
     int n = atoi(argv[1]);
     int pid = 0;
-    for(int i = 0 ; i < n ; i++) {
+    for (int i = 0; i < n; i++) {
         pid = fork();
-        if(pid == 0) {
+        if (pid == 0) {
             int son_pid = getpid();
-            printf("je m'appelle %d et je suis le numero %d\n",son_pid,i);
-            return(EXIT_SUCCESS);
+            printf("je m'appelle %d et je suis le numero %d\n", son_pid, i);
+            return (EXIT_SUCCESS);
         }
     }
-    for(int i = 0; i<n;i++) {
+    for (int i = 0; i < n; i++) {
         int stat;
         int pid = wait(&stat);
-        printf("%d a quitte\n",pid);
+        printf("%d a quitte\n", pid);
     }
     return (EXIT_SUCCESS); // on termine le programme en retournant une valeur disant que tout s'est bien passé
 }
