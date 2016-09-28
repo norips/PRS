@@ -115,12 +115,16 @@ evaluer_expr(Expression *e) {
                 int stdo = dup(1);
                 int pid = fork();
                 if(pid == 0){
+                    close(pfd[1]);
                     dup2(pfd[0], 0); /* connect the read side with stdin */
-                    evaluer_expr(e->droite);
+                    close(pfd[0]);
+                    execvp(e->droite->arguments[0],e->droite->arguments);
                     exit(EXIT_SUCCESS);
                 } else if (pid > 0) {
+                    close(pfd[0]);
                     dup2(pfd[1], 1); /* connect the write side with stdin */
-                    evaluer_expr(e->gauche);
+                    close(pfd[1]);
+                    execvp(e->gauche->arguments[0],e->gauche->arguments);
                     int stat;
                     wait(&stat); // Block here
                 }
