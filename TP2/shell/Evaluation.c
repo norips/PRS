@@ -105,6 +105,7 @@ evaluer_expr(Expression *e) {
                 evaluer_expr(e->gauche);
                 exit(EXIT_SUCCESS);
             }
+            wait(NULL);
             break;
             }
         case PIPE:
@@ -124,7 +125,7 @@ evaluer_expr(Expression *e) {
                     close(pfd[0]);
                     dup2(pfd[1], 1); /* connect the write side with stdin */
                     close(pfd[1]);
-                    execvp(e->gauche->arguments[0],e->gauche->arguments);
+                    evaluer_expr(e->gauche);
                     int stat;
                     wait(&stat); // Block here
                 }
@@ -133,6 +134,9 @@ evaluer_expr(Expression *e) {
                 printf("test\n");
                 break;
             }
+        case SEQUENCE:
+            evaluer_expr(e->gauche);
+            evaluer_expr(e->droite);
         default:
             break;
     }
