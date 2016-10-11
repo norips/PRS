@@ -18,7 +18,7 @@ void verif(int cond, const char* msg) {
 * Vérifie que le nombre argc est supérieur à n. Si non, on affiche le message 'Need x parameters' et on quitte.
 * Est utilisé pour tester si le nombre de paramètres passés à la commande compilée est suffisant.
 */
-void checkParam(int argc, int n) {
+void checkParam(const int argc, int n) {
     if (argc > n)
         return;
     fprintf(stderr, "Need %d parameters\n", n);

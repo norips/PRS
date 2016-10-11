@@ -6,4 +6,4 @@
 * Ici les commentaires explicatifs des fonctions sont détaillés dans les fichiers en .c pour une question de simplicité. 
 */
 void verif(int,const char*);
-void checkParam(int,int);
+void checkParam(const int,int);
