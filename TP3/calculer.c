@@ -35,9 +35,9 @@ void closeP(int pipe[][2],int n) {
     }
 }
 int main(int argc, char** argv) {
-    int pip[N+1][2];
+    int pip[N][2];
     int stdout = dup(1);
-    for(int i = 0; i <= N;i++) {
+    for(int i = 0; i < N; i++) {
         pipe(pip[i]);
     }
     
@@ -56,9 +56,8 @@ int main(int argc, char** argv) {
                 //fprintf(stderr,"funtab %d = %lf",i,d);
                 write(STDOUT_FILENO,&d,sizeof(double));
             }
+            wait(NULL);
             exit(EXIT_SUCCESS);
-        } else {
-           // wait(NULL);
         }
     }
     wait(NULL);
