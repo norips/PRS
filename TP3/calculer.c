@@ -22,54 +22,45 @@ int nombre_suivant(double *d) {
     return 0;
 }
 
-typedef int (*fptr)(void); // pointeur de fonction
-fptr g[N];
+typedef double (*funtab_t)(double);
+double ajouter_un_dizieme(double d){return d+0.1;}
+double ajouter_un_centieme(double d){return d+0.01;}
+double ajouter_un_millieme(double d){return d+0.001;}
 
-int fonc() {
-    double d;
-    int res = nombre_suivant(&d);
-    d = d * 0.68 + d * 0.458;
-    write(STDOUT_FILENO, &d, sizeof (double));
-    return res;
-}
-
-int main(int argc, char** argv) {
-    checkParam(argc, 2);
-    int f = open("./genNb", O_RDONLY);
-    for (int i = 0; i < N; i++) {
-        g[i] = &fonc;
+funtab_t funtab[]={ajouter_un_millieme,ajouter_un_centieme,ajouter_un_dizieme,ajouter_un_millieme};
+void closeP(int pipe[][2],int n) {
+    for(int i = 0;i < n; i++) {
+        close(pipe[i][0]);
+        close(pipe[i][1]);
     }
-    int pip[2];
+}
+int main(int argc, char** argv) {
+    int pip[N+1][2];
     int stdout = dup(1);
-    pipe(pip);
-    dup2(f,0);
-    if(fork() == 0){
-        close(pip[1]);
-        dup2(pip[0],0);
-        close(pip[0]);
-        int pip2[2];
-        pipe(pip2);
-        close(pip2[0]);
-        dup2(pip2[1],1);
+    for(int i = 0; i <= N;i++) {
+        pipe(pip[i]);
+    }
+    
+    for (int i = 0; i < N; i++) {
         if(fork() == 0){
-            close(pip2[1]);
-            dup2(pip2[0],0);
-            close(pip2[0]);
-            int pip3[2];
-            pipe(pip3);
-            close(pip3[0]);
-            dup2(pip3[1],1);
-            close(pip3[1]);
-            if(fork() == 0){
-                close(pip3[1]);
-                dup2(pip3[0],0);
-                close(pip3[0]);
-                while(!g[2]()){}
+            if(i!=0) {
+                dup2(pip[i][0],0);
             }
-            while(!g[1]()){}
+            if(i != N-1) {
+                dup2(pip[i+1][1],1);
+            }
+            closeP(pip,N);
+            double d;
+            while(nombre_suivant(&d) != -1){
+                d = funtab[i](d);
+                //fprintf(stderr,"funtab %d = %lf",i,d);
+                write(STDOUT_FILENO,&d,sizeof(double));
+            }
+            exit(EXIT_SUCCESS);
+        } else {
+           // wait(NULL);
         }
     }
-    while(!g[0]()){}
     wait(NULL);
     return (EXIT_SUCCESS);
 }
