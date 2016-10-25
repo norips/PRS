@@ -108,7 +108,7 @@ main(int argc, char *argv[])
   sigset_t mask, old_mask;
   sigemptyset(&mask);
   sigaddset(&mask,SIG_CURRENT);
-  //Block SIGUSR1
+  //Block SIGALRM
   sigprocmask(SIG_BLOCK,&mask,&old_mask);
   timer();
 #endif
