@@ -6,10 +6,10 @@
 
 jmp_buf buf;
 void routine(int signo) {
-    longjmp(buf,1);
+    siglongjmp(buf,1);
 }
 int executer_avant_delai( void (*fun)(void *), void *parametre, int delai_en_seconde){
-    if(setjmp(buf) != 1) {
+    if(sigsetjmp(buf,1) != 1) {
         alarm(delai_en_seconde);
         struct sigaction s;
         s.sa_handler = routine;
