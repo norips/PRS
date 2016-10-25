@@ -11,6 +11,7 @@
 
 #define NCOMMANDES 4
 
+#define SIG_CURRENT SIGCHLD
 struct etat
 {
   pid_t pid;
@@ -82,6 +83,11 @@ void timer()
   time.it_value.tv_usec=500000;
   setitimer(ITIMER_REAL,&time,NULL);
 }
+void routine(int signo){
+    if(signo == SIG_CURRENT){
+        afficher_etat();
+    }
+}
 
 int
 main(int argc, char *argv[])
@@ -91,6 +97,21 @@ main(int argc, char *argv[])
   
   int i;
   /* Lancement */
+  struct sigaction s;
+  s.sa_handler = routine;
+  s.sa_flags = 0;
+  sigemptyset(&s.sa_mask);
+  //Receive SIGALRM
+  sigaction(SIG_CURRENT,&s,NULL);
+  
+#if SIG_CURRENT == SIGALRM
+  sigset_t mask, old_mask;
+  sigemptyset(&mask);
+  sigaddset(&mask,SIG_CURRENT);
+  //Block SIGUSR1
+  sigprocmask(SIG_BLOCK,&mask,&old_mask);
+  timer();
+#endif
   for(i=0; i < NCOMMANDES; i++)
     {
       cpid = fork();
@@ -116,7 +137,12 @@ main(int argc, char *argv[])
   /* Analyse */
   while(reste_commande())
     {
-      w = waitpid(0, &status, WUNTRACED | WCONTINUED | WNOHANG);
+#if SIG_CURRENT == SIGALRM
+      sigsuspend(&old_mask);
+#endif
+      w = waitpid(0, &status, WUNTRACED | WCONTINUED);
+      fprintf(stderr,"wait : %d\n",w);
+      perror("wait");
 
       if (w > 0) {
 	for(i=0; i < NCOMMANDES ; i++)
@@ -133,10 +159,7 @@ main(int argc, char *argv[])
 	  etat_tableau[i]->etat=2; 
 	}
       }
-      afficher_etat();
-      sleep(1); 
     }
-  
   afficher_etat();
   printf("Tous les processus se sont terminés !\n");
   
