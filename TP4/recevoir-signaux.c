@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <string.h>
 
+#define _XOPEN_SOURCE 700
 /*
  * 
  */
@@ -19,8 +20,12 @@ static void routine(int signo) {
 }
 int main(int argc, char** argv) {
     printf("PID = %d\n",getpid());
+    struct sigaction s;
+    s.sa_handler = routine;
+    sigemptyset(&s.sa_mask);
+    s.sa_flags = 0;
     for(int i = 0; i < NSIG; i++) {
-        signal(i,routine);
+        sigaction(i,&s,NULL);
     }
     while(1) {
         sleep(1);
