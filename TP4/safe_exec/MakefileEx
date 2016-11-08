@@ -1,0 +1,46 @@
+# NE PAS OUBLIER D'AJOUTER LA LISTE DES DEPENDANCES A LA FIN DU FICHIER
+
+CIBLES = safe_exec_test
+SRCS = safe_exec.c  safe_exec_test.c
+LIBS =  
+
+PREFIX =  ../..
+###########################################################
+
+OBJS = $(SRCS:.c=.o)
+INCDIR = $(PREFIX)/include
+LIBDIR = $(PREFIX)/lib
+BINDIR = $(PREFIX)/bin
+
+# nom du compilateur
+CC = gcc
+
+#options du compilateur 
+CFLAGS = -Wall -pedantic -g 
+
+# option du preprocesseur
+CPPFLAGS =  -I$(INCDIR) 
+
+# options du linker et liste des biblioth�ques � charger
+LDFLAGS =                         
+LDLIBS = -L$(LIBDIR) $(LIBS)  
+
+# cible par d�faut
+$(CIBLES): $(OBJS)
+
+.PHONY: all
+all: $(CIBLES)
+
+
+.PHONY: clean
+clean:
+	rm -f *.o *~ $(CIBLES)
+
+.PHONY: dep
+dep:
+	gcc $(CPPFLAGS) -MM $(SRCS)
+
+# liste des d�pendances g�n�r�e par 'make dep'
+
+safe_exec.o: safe_exec.c safe_exec.h
+safe_exec_test.o: safe_exec_test.c safe_exec.h

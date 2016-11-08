@@ -3,7 +3,10 @@ CFLAGS := -Wall -std=gnu99 -g
 SRC := $(wildcard *.c)
 TARGET := $(SRC:%.c=bin/%)
 
-all: | bin $(TARGET) execute
+all: bin $(TARGET) safe execute 
+
+safe : 
+	cd safe_exec && $(MAKE) -f MakefileEx
 
 execute : 
 	cd execute_avant && $(MAKE) -f MakefileEx
@@ -19,3 +22,4 @@ bin:
 clean:
 	rm -fr bin/
 	cd execute_avant && $(MAKE) -f MakefileEx clean
+	cd safe_exec && $(MAKE) -f MakefileEx clean
