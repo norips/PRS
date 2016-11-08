@@ -6,7 +6,7 @@
 void 
 oui_ou_non(void *reponse)
 {
-  char c = getchar();
+  char c = getchar(); getchar();
   *(int *)reponse = c == 'o' || c == 'O' ;
 }
 
@@ -22,6 +22,8 @@ main()
     printf("reponse : %c\n", rep == 1 ? 'O' : 'N');
   else 
     printf("pas de réponse\n");
+  
+  printf(" oui ou non ? ");
   if( executer_avant_delai(oui_ou_non,&rep,5))
     printf("reponse : %c\n", rep == 1 ? 'O' : 'N');
   else 
