@@ -23,9 +23,8 @@ void *HelloGoodbye(void *p) {
 int main(int argc, char *argv[]) {
     checkParam(argc,1);
     int k = atoi(argv[1]);
-    pthread_t *tab_thread = malloc(k * sizeof(pthread_t*));
+    pthread_t tab_thread[k];
     for(int i = 0; i < k; i++){
-        tab_thread[i] = malloc(sizeof(pthread_t));
         pthread_create(&tab_thread[i],NULL,HelloGoodbye,NULL);
     }
     

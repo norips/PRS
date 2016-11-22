@@ -17,13 +17,12 @@ void *Calculate(void *p) {
 int main(int argc, char *argv[]) {
     nb_threads = atoi(argv[1]);
 
-    pthread_t *tab_thread = malloc(nb_threads * sizeof (pthread_t*));
+    pthread_t tab_thread[nb_threads];
     
     for (int i = 0; i < nb_threads; i++) {
-        tab_thread[i] = malloc(sizeof (pthread_t));
         int *n = malloc(sizeof(int));
         *n = i;
-        pthread_create(&tab_thread[i], NULL, Calculate, n);
+        pthread_create(tab_thread + i, NULL, Calculate, n);
     }
 
     for (int i = 0; i < nb_threads; i++) {

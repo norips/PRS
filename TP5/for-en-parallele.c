@@ -19,19 +19,19 @@ void* Calculate(void *n){
     for(unsigned long i = 0; i < MAX; i++)
         k++;
     pthread_mutex_unlock(&mutex_stock);
+    return NULL;
 }
 int main(int argc, char** argv) {
     int nb_threads = atoi(argv[1]);
 
-    pthread_t **tab_thread = malloc(nb_threads * sizeof (pthread_t*));
+    pthread_t tab_thread[nb_threads];
     
     for (int i = 0; i < nb_threads; i++) {
-        tab_thread[i] = malloc(sizeof (pthread_t));
-        pthread_create(tab_thread[i], NULL, Calculate, NULL);
+        pthread_create(tab_thread + i, NULL, Calculate, NULL);
     }
     
     for (int i = 0; i < nb_threads; i++) {
-        pthread_join(*tab_thread[i], NULL);
+        pthread_join(tab_thread[i], NULL);
     }
     printf("%ld",k);
     return (EXIT_SUCCESS);
